@@ -4,19 +4,22 @@ const MongoClient = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectId
 require('dotenv').config()
 
-// const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.gqnwo.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority;`
-const app = express()
-const port =process.env.PORT||3000
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.gqnwo.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 
+const port=3000
+
+const app = express()
 app.use(cors())
 app.use(express.json())
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
 
 
-console.log(process.env.DB_NAME)
 
 
 // const { MongoClient } = require('mongodb');
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.gqnwo.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
+
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect(err => {
   const NewsCollection = client.db("NewPortal").collection("news");
@@ -47,12 +50,7 @@ client.connect(err => {
   })
 
   
-  // app.get('/getService',(req,res)=>{
-  //   serviceCollection.find({})
-  //   .toArray((err,documents)=>{
-  //     res.send(documents)
-  //   })
-  // })
+  
 
   const topNewsCollection = client.db("NewPortal").collection("topNews");
   app.post('/topNews',(req,res)=>{
@@ -84,11 +82,7 @@ client.connect(err => {
 
 });
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
 
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
-})
+
+app.listen(process.env.PORT||port)
