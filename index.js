@@ -6,7 +6,7 @@ require('dotenv').config()
 
 // const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.gqnwo.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority;`
 const app = express()
-const port = 3000
+const port =process.env.PORT||3000
 
 app.use(cors())
 app.use(express.json())
@@ -59,12 +59,27 @@ client.connect(err => {
     console.log(req.body)
     topNewsCollection.insertOne(req.body)
   })
-  app.get('/getTopNews',(req,res)=>{
-    topNewsCollection.find({})
-    .toArray((err,document)=>{
-      res.send(document)
-    })
-  })
+  
+ app.get('/getTopNews',(req,res)=>{
+   topNewsCollection.find({})
+   .toArray((err,document)=>{
+     res.send(document)
+   })
+ })
+
+
+ const adminCollection = client.db("NewPortal").collection("adminPannel");
+ app.post('/addAdmin',(req,res)=>{
+   console.log(req.body)
+   adminCollection.insertOne(req.body)
+ })
+
+ app.get('/admin',(req,res)=>{
+   adminCollection.find({})
+   .toArray((err,document)=>{
+     res.send(document)
+   })
+ })
 
 });
 
