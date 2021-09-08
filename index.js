@@ -74,6 +74,7 @@ client.connect(err => {
    adminCollection.insertOne(req.body)
  })
 
+
  app.get('/admin',(req,res)=>{
    adminCollection.find({})
    .toArray((err,document)=>{
